@@ -1,0 +1,46 @@
+.editor-component-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+    height: calc(100% - 5px);
+    width: auto;
+    padding-bottom: 5px;
+}
+
+.note-textarea{
+    flex: 1;
+    display: inline-block;
+    box-sizing: border-box;
+    resize: none;
+    /* height: calc(100% - 5px); */
+    width: calc(100% - 10px);
+    border: none;
+    margin: 0;
+    padding: 0;
+    background-color: #333;
+    color: whitesmoke;
+    cursor: auto;
+    font-family: 'Courier New', Courier, monospace;
+    font-size:medium;
+}
+
+/* for webkit which is chrome for our electron app */
+.note-textarea::-webkit-scrollbar{
+    width: 6px;
+}
+.note-textarea::-webkit-scrollbar-thumb{
+    background-color: #68758f;
+    border-radius: 8px;
+}
+.note-textarea::-webkit-scrollbar-track{
+    width: 8px;
+    background-color: transparent;
+}
+.note-textarea::-webkit-scrollbar-thumb:hover{
+    cursor:default;
+    background-color: #7e98b1;
+}
+
+.note-textarea:focus-visible{
+    outline: none;
+} 

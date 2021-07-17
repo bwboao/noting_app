@@ -1,3 +1,11 @@
+:root{
+  --main-bg-color: #19243b;
+  --light-bg-color: #203258;
+  --line-color: #707070;
+  --bright-line-color: #68758f;
+}
+
+
 .App {
   text-align: center;
 }
@@ -24,6 +32,18 @@
   color: white;
 }
 
+.App-container {
+  background-color: #19243b;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: flex-start;
+  /* font-size: calc(10px + 2vmin); */
+  color: white;
+}
+
+
 .App-link {
   color: #61dafb;
 }
@@ -36,3 +56,46 @@
     transform: rotate(360deg);
   }
 }
+
+.Menu-left{
+  flex: 0 0 56px;
+  width: 60px;
+  padding: 5px 2px;
+  /* height: 100vh; */
+  background-color: transparent;
+  border-right: #68758f 1px solid;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.button{
+  border: 0;
+  padding: 0;
+  background-color: transparent;;
+}
+
+.button img,
+.button svg{
+  border-radius: 50% 50%;
+}
+
+.button:hover svg,
+.button:hover img{
+  /* box-shadow: 0px 2px 10px #73f26a3b; */
+  box-shadow: 0px 0px 10px white;
+}
+
+
+.journal-button{
+  width: 50px;
+  height: 50px;
+}
+
+.note-button{
+  display: inline-block;
+  top: 20em;
+  width: 50px;
+}
+

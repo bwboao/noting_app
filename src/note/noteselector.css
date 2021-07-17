@@ -1,0 +1,28 @@
+.note-list{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    justify-content: left;
+    align-items: stretch;
+}
+
+.note-list-button{
+    width: 100%;
+    text-align: left;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    background-color: transparent;
+    height: 2.3rem;
+    border: none;
+    color: white;
+
+}
+
+.note-list-button:hover{
+    background-color: #203258;
+}
+
+.note-brief{
+    color: var(--line-color);
+}

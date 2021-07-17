@@ -1,0 +1,31 @@
+.note-area{
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;;
+}
+
+.note-selector-container{
+    padding: 5px;
+    justify-content: left;
+    width: 170px;
+    border-right: #68758F 1px solid;
+}
+
+.note-bar{
+    margin-bottom: 3px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+
+.editor-container{
+    flex: 1;
+    box-sizing: border-box;
+    padding: 5px 5px 0 5px;
+    margin: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: #333;
+}

@@ -1,0 +1,215 @@
+.todo-list-container{
+    box-sizing: border-box;
+    flex: 0 0 350px;
+    display: flex;
+    flex-direction: column;
+    justify-items: flex-start;
+    border-left: var(--bright-line-color) 1px solid
+}
+
+.sublist-container{
+    max-height: calc(100vh - 63px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0px 10px;
+}
+/* To controll the scroll bar */
+.sublist-container::-webkit-scrollbar{
+    width: 6px;
+}
+.sublist-container::-webkit-scrollbar-thumb{
+    background-color: #68758f;
+    border-radius: 8px;
+}
+.sublist-container::-webkit-scrollbar-track{
+    width: 8px;
+    background-color: transparent;
+}
+.sublist-container::-webkit-scrollbar-thumb:hover{
+    cursor:default;
+    background-color: #7e98b1;
+}
+
+.sublist{
+    box-sizing: border-box;
+    display: block;
+    margin-top: 10px;
+    border-radius: 20px;
+    box-shadow: 0px 2px 5px #73f26a3b;
+    padding: 10px 20px 30px 20px;
+}
+
+.sublist-header{
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.delete-sublist-btn{
+    float: right;
+    border: 0;
+    background-color: transparent;
+    color: whitesmoke;
+    font-size: large;
+}
+.delete-sublist-btn:hover{
+    cursor: pointer;
+}
+
+
+.todo-item{
+    display: flex;
+    flex-direction: row;
+    text-align: left;
+    box-sizing: border-box;
+    width: 100%;
+    border: transparent 1px solid;
+    position: relative;
+    align-items: flex-start;
+    align-content: flex-start;
+}
+.todo-item:hover,
+.todo-item:active,
+.todo-item:focus-within,
+.todo-item:focus-visible{
+    border-top: var(--line-color) 1px solid;
+    border-bottom: var(--line-color) 1px solid;
+}
+
+/* .todo-checkbox{
+    -webkit-accent-color: #19243b;
+} */
+/*https://www.w3.org/TR/css-ui-4/#propdef-appearance*/
+.todo-checkbox{
+    /* all: unset;  */
+    appearance: none;
+    box-sizing: border-box;
+    background-color: #19243b ;
+    border: var(--line-color) 1px solid;
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    color: yellowgreen;
+    margin: 2px 0 0 2px;
+    /* position: relative; */
+}
+/*
+.todo-checkbox::before{
+    content: "";
+    width: 20px;
+    height: 20px;
+    display: block;
+    background-color: yellowgreen;
+    position: absolute;wwwwwww
+    top: 0;
+    left: 0;
+}
+.todo-checkbox:checked::before{
+    content: "";
+    width: 20px;
+    height: 20px;
+    background-color: teal;
+    border-left-color: tomato;
+    border-right-color: violet;
+} */
+.todo-checkbox:checked{
+    /* content: ""; */
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-color: teal;
+    border-left-color: tomato;
+    border-right-color: violet;
+    position: relative;
+}
+/* .todo-checkbox:checked::after{
+    content: "aa";
+    width: 20px;
+    height: 20px;
+    border-left-width: 2px;
+    color: lightblue;
+    background-color: coral;
+    border-left-color: tomato;
+    border-right-color: violet;
+    z-index: 2;
+} */
+
+.todo-item-label{
+    display: inline-flex;
+    flex: 1;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 2px;
+    margin-right: 2px;
+    margin-left: 2px;
+}
+
+.todo-item-label > label{
+    display: inline-block;
+}
+
+.todo-item-input{
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background-color: var(--main-bg-color);
+    width: calc(100%);
+    min-height: 1em;
+    color: var(--line-color);
+    resize: none;
+    overflow: auto;
+    word-wrap: break-word;
+    word-break: break-all;
+    /* hyphens: auto; */
+}
+/* Use CSS trick to show place holder */
+.todo-item-input:empty::before{
+    content: attr(placeholder);
+    position: absolute;
+    color: var(--bright-line-color);
+    background-color: transparent;
+}
+
+
+.todo-item-input:focus-visible{
+    border:none;
+    outline: none;
+}
+
+.todo-add{
+    margin: 2px 0 0 2px;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+}
+.plus-icon{
+    font-family: monospace;
+}
+
+.todo-item-delete-btn{
+    margin-top: 2px;
+    margin-right: 2px;
+    border-radius: 50%;
+    border: 0;
+    background-color: transparent;
+    color: var(--line-color);
+    width: 20px;
+    height: 20px;
+    visibility: hidden;
+}
+
+.todo-item:hover > .todo-item-delete-btn{
+    visibility: visible;
+}
+
+.todo-item:active > .todo-item-delete-btn,
+.todo-item:focus-within > .todo-item-delete-btn,
+.todo-item:focus-visible > .todo-item-delete-btn{
+    visibility: visible;
+}
+
+.todo-item-delete-btn:hover{
+    cursor: pointer;
+    background-color: var(--light-bg-color);
+    visibility: visible;
+}
