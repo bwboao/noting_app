@@ -2,11 +2,13 @@
 A [React](https://reactjs.org/) + [Electron](https://www.electronjs.org/) combined project for code learning.
 This project is for own-use locally, **should not load any other internet resources, may be vulnerable.**
 
+![image](https://user-images.githubusercontent.com/20790736/138731376-be012c38-272d-4266-b98c-4150d18a3c05.png)
+
 ## To-do list
 Add new To do lists, write anything down and delete them as you want, check them out when finished!
 
 ## Notes
-You can create note and delete note, no markdown is supported, just plain text for now
+You can create note and delete note, no markdown is supported, just plain text for now. The notes are ordered by the date last changed.
 
 ## Journal
 You can create journal(s) for today, seven days are shown initially, click show more for 7 more days.
