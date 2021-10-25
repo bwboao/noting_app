@@ -11,9 +11,19 @@ class Note extends React.Component{
           createNote: false,
           createFolder: false,
           fileclicked: "",
+          notelist: "",
+          filestatus: "",
         };
       }
-       
+    
+    getNewNotelist(){
+        const notelist = ipcRenderer.sendSync("getList","note")
+        this.setState({
+            notelist: notelist,
+            filestatus: "delete",
+        })
+    }
+
     handleCreateNote(){
         console.log("create note!")
         let filevalue = {
@@ -24,9 +34,10 @@ class Note extends React.Component{
         }
         // [type,filename,value]
         let obj = ["note",filevalue]
-        console.log(obj)
+        // console.log(obj)
         const filestatus = ipcRenderer.sendSync("newFile",obj);
-        console.log("status",filestatus)
+        // console.log("status",filestatus)
+        this.getNewNotelist(filestatus)
     }
 
     handleCreateFolder(){
@@ -36,7 +47,7 @@ class Note extends React.Component{
     handleClickNote(notename){
         console.log(notename,"is clicked")
         this.setState({
-            reateNote: false,
+            createNote: false,
             createFolder: false,
             fileclicked: notename 
         })
@@ -59,6 +70,9 @@ class Note extends React.Component{
                     </div>
                     <NoteSelector
                         handleClickNote={(i) => this.handleClickNote(i)}
+                        notelist={this.state.notelist}
+                        fileclicked={this.state.fileclicked}
+                        getNewNotelist={()=> this.getNewNotelist()}
                     />
                 </div>
                 <div className="editor-container">

@@ -1,7 +1,7 @@
 // The preload script handles reading the notes and journals 
 // before the app fires up.
-// const {app, contextBridge} = require('electron');
-// const fs = require('fs');
+const {app, contextBridge} = require('electron');
+const fs = require('fs');
 
 
 // const documentPath = app.getPath("documents");

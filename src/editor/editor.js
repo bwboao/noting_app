@@ -1,8 +1,6 @@
-import { TouchBarOtherItemsProxy } from 'electron';
 import React from 'react';
 import './editor.css';
 import { ipcRenderer } from 'electron';
-import { stat } from 'original-fs';
 
 
 class Editor extends React.Component{
@@ -14,6 +12,10 @@ class Editor extends React.Component{
             title: "",
             file: this.props.file,
         }
+    }
+    componentDidMount(){
+        console.log(this.props);
+        this.resetTheValue(this.props.file)
     }
     shouldComponentUpdate(nextProps){
         console.log("should?",nextProps.file,this.props.file)
@@ -33,6 +35,8 @@ class Editor extends React.Component{
         })
     }
     handleOnBlur(e){
+        // If nothing is changed don't save
+        if(this.state.value === this.state.resetvalue) return;
         //Save at onblur
         // something call electron to save
         console.log("saving",e,this.props.file,this.props.type);
@@ -53,21 +57,22 @@ class Editor extends React.Component{
     resetTheValue(filename){
         console.log("reset")
         // read the file since filename has changed
-        if(filename === null) return;
+        if(filename === null || filename === "") return;
         let obj = [this.props.type,filename];
         let [status,filevalue] = ipcRenderer.sendSync('readFile',obj);
-        console.log("read file status",status);
-        if(status==="read file fail" || filevalue == undefined) return;
+        console.log("read file status",status,filevalue);
+        if(status==="read file fail" || filevalue === undefined) return;
         this.setState({
             file: filename,
             value: filevalue.value,
+            resetvalue: filevalue.value,
         })
     }
     render(){
         // console.log(this.state.file)
         return(
             <div className="editor-component-container">
-                <span>file: {this.props.file}</span>
+                {/* <span>file: {this.props.file}</span> */}
                 <textarea
                     key={this.props.file}
                     onInput={(e)=>this.handleInput(e)}

@@ -17,7 +17,7 @@
     border: none;
     margin: 0;
     padding: 0;
-    background-color: #333;
+    background-color: var(--main-bg-color);
     color: whitesmoke;
     cursor: auto;
     font-family: 'Courier New', Courier, monospace;

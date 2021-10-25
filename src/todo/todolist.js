@@ -7,6 +7,7 @@ class ToDoItem extends React.Component{
         this.state ={
             inputvalue: "",
             copy: false,
+            checked: this.props.checked,
         }
 
         this.inputRef = React.createRef();
@@ -62,6 +63,9 @@ class ToDoItem extends React.Component{
             
             this.inputRef.current.focus();
         }
+        // console.log("MOUNT TODO ITEM",this);
+        if(this.props.checkbox)
+            this.props.handleStoreItem(this.state.checked,this.inputRef.current.outerText);
     }
     // https://developer.mozilla.org/en-US/docs/Web/API/Element/compositionstart_event
     // When typing chinese reading the <Enter> key will break the app
@@ -118,6 +122,20 @@ class ToDoItem extends React.Component{
         if(!this.props.checkbox)
             // create with no focus
             this.props.handleToDoBlur(e,false);
+
+        // save the whole tree
+        // console.log("blur",this.state.inputvalue,e.target.outerText);
+        this.props.handleStoreItem(this.state.checked,e.target.outerText);
+    }
+    handleCheck(e){
+        // console.log(e);
+        let status = this.state.checked;
+        this.setState({
+            checked: !status,
+        })
+        // store checked
+        // console.log("checked status:",!status,this.inputRef.current.outerText);
+        this.props.handleStoreItem(!status,this.inputRef.current.outerText);
     }
 
     render(){
@@ -128,6 +146,9 @@ class ToDoItem extends React.Component{
             type="checkbox" 
             id="check"
             className="todo-checkbox"
+            // onClick={(e)=>this.handleCheck(e)}
+            onChange={(e)=>this.handleCheck(e)}
+            checked={this.state.checked}
             ></input>
         } else{
             itemcheck = <div className="plus-icon todo-add">╋</div>
@@ -149,7 +170,9 @@ class ToDoItem extends React.Component{
                     <div 
                         type="text"
                         contentEditable="true"
-                        className="todo-item-input"
+                        className={ this.state.checked
+                                        ? "todo-item-input todo-item-checked"
+                                        : "todo-item-input"}
                         // use CSS to attend the place holder
                         placeholder={this.props.placeholder}
                         value={this.props.renew}
@@ -183,12 +206,41 @@ class SubList extends React.Component{
             itemsTodo: [{
                 id: "create",
                 value: "",
-                checked: "no",
+                checked: false,
                 focus: false,
             }],
             itemsDone: [],
             renew: true,
         }
+    }
+    componentDidMount(){
+        // check if there things in is localstorage
+        const storedtree = localStorage.getItem('toDoList');
+        if (storedtree){
+            const parsedtree = JSON.parse(storedtree);
+            parsedtree.forEach(list => {
+                if(list.id === this.props.listid){
+                    // console.log("did mount",list,this.props.listid)
+                    this.setState({
+                        itemsTodo: list.tree
+                    })
+                }
+            });
+        }
+    }
+
+    handleStoreItem(id,checked,inputvalue){
+        // console.log("storing",id,checked,inputvalue);
+        // console.log("storing itemesTodo",this.state.itemsTodo);
+        const itemsTodo = this.state.itemsTodo.slice();
+        itemsTodo.map((item) => {
+            if(item.id === id){
+                item.value = inputvalue;
+                item.checked = checked;
+            }
+            item.focus = false;
+        })
+        this.props.handleStoreToDoList(itemsTodo);
     }
 
     handleClickLabel(e){
@@ -213,7 +265,7 @@ class SubList extends React.Component{
             itemsTodo: itemsTodo.concat([{
                 id: itemid,
                 value: e.target.outerText,
-                checked: "no",
+                checked: false,
                 focus: focus,
             }]),
             renew: !this.state.renew,
@@ -228,7 +280,7 @@ class SubList extends React.Component{
         const removedid = itemsTodo.splice(pos+1,0,{
             id: Date.now(),
             value: "",
-            checked: "no",
+            checked: false,
             focus: true,
         });
         console.log(pos,"removed",removedid);
@@ -253,19 +305,21 @@ class SubList extends React.Component{
         this.setState({
             itemsTodo: itemsTodo,
         })
+        this.props.handleStoreToDoList(itemsTodo);
     }
 
     render(){
         // console.log("this is id",this.props.listid,"my delete handle is",this.props.handleDeleteToDo)
 
         const itemsTodo = this.state.itemsTodo.slice();
-        let todoitems
+        let todoitems;let doneitems;
         if(itemsTodo.length === 0){
             todoitems = null
         }else{
             todoitems = itemsTodo.map((item,index) =>{
                 // console.log(item);
                 if(item.id === "create") return null;
+                if(item.checked === true) return null;
                 return(
                 <ToDoItem
                     key={item.id}
@@ -275,9 +329,32 @@ class SubList extends React.Component{
                     handleToDoBlur={(e,f) => this.handleToDoBlur(e,f)}
                     handleDeleteToDoItem={()=>this.handleDeleteToDoItem(item.id)}
                     handleCreateNext={(e)=>this.handleCreateNext(e)}
+                    handleStoreItem={(e,f)=>this.handleStoreItem(item.id,e,f)}
                     placeholder="..."
                     checkbox={true}
                     focus={item.focus}
+                    checked={item.checked}
+                />)
+            });
+
+            doneitems = itemsTodo.map((item,index) =>{
+                // console.log(item);
+                if(item.id === "create") return null;
+                if(item.checked === false) return null;
+                return(
+                <ToDoItem
+                    key={item.id}
+                    id={item.id}
+                    value={item.value}
+                    handleClickLabel={(e) => this.handleClickLabel(e)}
+                    handleToDoBlur={(e,f) => this.handleToDoBlur(e,f)}
+                    handleDeleteToDoItem={()=>this.handleDeleteToDoItem(item.id)}
+                    handleCreateNext={(e)=>this.handleCreateNext(e)}
+                    handleStoreItem={(e,f)=>this.handleStoreItem(item.id,e,f)}
+                    placeholder="..."
+                    checkbox={true}
+                    focus={item.focus}
+                    checked={item.checked}
                 />)
             });
         }
@@ -311,10 +388,13 @@ class SubList extends React.Component{
                     key={"add"+this.state.renew}
                     handleClickLabel={(e) => this.handleClickLabel(e)}
                     handleToDoBlur={(e,f) => this.handleToDoBlur(e,f)}
+                    handleStoreItem={(e)=>this.handleStoreItem("add"+this.state.renew,e)}
                     placeholder="Add sth to the list..."
                     checkbox={false}
                     renew={this.state.renew}
                 />
+                <hr className="todolist-hr"/>
+                {doneitems}
             </div>
         )
     }
@@ -327,33 +407,95 @@ class ToDoList extends React.Component {
         this.state = {
             count : 0,
             idlist : [],
+            todotree : [],
         };
+    }
+
+    componentDidMount(){
+        // check if there things in is localstorage
+        const storedtree = localStorage.getItem('toDoList');
+        if (storedtree){
+            const parsedtree = JSON.parse(storedtree);
+            console.log("TODOLISTMOUNT",parsedtree)
+            let idlist = [];
+            let count = 0;
+            parsedtree.map((list) =>{
+                idlist = idlist.concat([list.id]);
+                count++;
+            })
+            this.setState({
+                count: count,
+                idlist: idlist,
+                todotree: parsedtree,
+            })
+        }
+    }
+
+    storeTree(todotree){
+        // localStorage
+        if (todotree.length === 0){
+            // console.log("clear the localstorage");
+            localStorage.removeItem('toDoList');
+        }
+        // const tree = JSON.stringify(this.state.todotree.slice());
+        const tree = JSON.stringify(todotree.slice());
+        localStorage.setItem('toDoList',tree);
+        // const storedtree = localStorage.getItem('toDoList')
+        // console.log("stored", JSON.parse(storedtree));
+    }
+
+    handleStoreToDoList(id,e){
+        let idlist = this.state.idlist.slice();
+        let todotree = this.state.todotree.slice();
+        todotree.map((list)=>{
+            if(list.id === id){
+                list.tree = e
+            }
+        })
+        // console.log("storing the tree",id,e);
+        // console.log("storing the tree",idlist,todotree);
+        this.setState({
+            todotree:  todotree
+        })
+        this.storeTree(todotree)
     }
     
     handleCreateToDo(){
         // use the time created as id
         const listid = Date.now();
         const idlist = this.state.idlist.slice()
+        const todotree = this.state.todotree.slice()
         this.setState({
             count: this.state.count + 1,
-            idlist: idlist.concat([listid])
+            idlist: idlist.concat([listid]),
+            todotree: todotree.concat([{id: listid, tree: null}]),
         });
         console.log("clicked",listid);
+    }
+    isIdSame(item){
+        // console.log(item.id,this,item.id === this,item.id == this)
+        return item.id === this;
     }
 
     handleDeleteToDo(id){
         const idlist = this.state.idlist.slice()
+        let todotree = this.state.todotree.slice()
         let pos = idlist.indexOf(id)
-        const removedid = idlist.splice(pos,1)
+        let removedid = idlist.splice(pos,1)
+        pos = todotree.findIndex(this.isIdSame,id);
+        removedid = todotree.splice(pos,1);
         this.setState({
             count: this.state.count - 1,
-            idlist: idlist
+            idlist: idlist,
+            todotree: todotree
         });
-        console.log("deleted",id,idlist,removedid);
+        console.log("deleted",id,idlist,todotree,removedid);
+        this.storeTree(todotree);
     }
 
     render(){
         // console.log(this.state,typeof(this.state.idlist))
+        // console.log("render",this.state)
         const idlist = this.state.idlist.slice()
         const nodeidlist = idlist.map((id) => {
             return(
@@ -361,6 +503,7 @@ class ToDoList extends React.Component {
                     key={id}
                     listid={id}
                     handleDeleteToDo={()=>this.handleDeleteToDo(id)}
+                    handleStoreToDoList={(e)=>this.handleStoreToDoList(id,e)}
                 />
             )
         })

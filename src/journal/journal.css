@@ -15,14 +15,14 @@
 }
 
 .journal-selector-container::-webkit-scrollbar{
-    width: 6px;
+    width: 4px;
 }
 .journal-selector-container::-webkit-scrollbar-thumb{
     background-color: #68758f;
     border-radius: 8px;
 }
 .journal-selector-container::-webkit-scrollbar-track{
-    width: 8px;
+    width: 4px;
     background-color: transparent;
 }
 .journal-selector-container::-webkit-scrollbar-thumb:hover{
@@ -65,6 +65,13 @@
 .journal-daynotes-container:hover~.journal-line>.journal-circle{
 	box-shadow: 0px 0px 5px 2px #73f26a3b;
 	background-color: lightblue;
+}
+
+.journal-brief-title{
+	color: #bbb;
+}
+.journal-brief-brief{
+	color: var(--bright-line-color);
 }
 
 .editor-container{

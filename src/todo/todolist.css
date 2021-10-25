@@ -175,6 +175,10 @@
     border:none;
     outline: none;
 }
+/* strike through the text */
+.todo-item-checked{
+    text-decoration: line-through;
+}
 
 .todo-add{
     margin: 2px 0 0 2px;
@@ -212,4 +216,10 @@
     cursor: pointer;
     background-color: var(--light-bg-color);
     visibility: visible;
+}
+hr{
+    border: none;
+}
+.todolist-hr{
+    border-bottom: var(--bright-line-color) 1px solid;
 }

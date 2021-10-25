@@ -1,11 +1,11 @@
 // import path from path
 const path = require('path')
-const { app, BrowserWindow, ipcMain, MenuItem } = require('electron')
+const { app, BrowserWindow, ipcMain, Menu } = require('electron')
 // import { app, BrowserWindow } from "electron"
 // import isDev from "electron-is-dev"
 const isDev = require('electron-is-dev')
 const fs = require('fs');
-const { stringify } = require('querystring');
+// const { stringify } = require('querystring');
 
 function createWindow(){
     // Create the window
@@ -17,16 +17,23 @@ function createWindow(){
             preload: path.join(__dirname,'preload.js'),
             nodeIntegration: true,
             contextIsolation: false,
+            enableRemoteModule: true,
         },
     });
 
-    
+    console.log(`file://${path.join(__dirname, '../build/index.html')}`);
+    // let file = `file://${path.join(__dirname, '../build/index.html')}`
+    file = './build/index.html'
     win.loadURL(
         isDev
         ? 'http://localhost:3000'
         : `file://${path.join(__dirname, '../build/index.html')}`
     );
+    // win.loadURL('http://localhost:3000');
+    // win.loadFile(file)
+    // win.webContents.openDevTools({ mode: 'detach'});
     // Open the Devtools.
+    // comment if build
     if(isDev){
         win.webContents.openDevTools({ mode: 'detach'});
     }
@@ -108,7 +115,7 @@ function checkToc(path){
     }
 }
 
-// update the notelist
+// update the notelistx
 ipcMain.on('getList', (event, arg) =>{
     console.log('getlist',arg)
     const type = arg;
@@ -172,11 +179,28 @@ ipcMain.on('newFile', (event, arg) =>{
 })
 
 function findId(item){
-    console.log("comparing i,this:",item,this,Number(this)); 
-    console.log("typeof",typeof(item.id),typeof(this),Number(this));
+    // console.log("comparing i,this:",item,this,Number(this)); 
+    // console.log("typeof",typeof(item.id),typeof(this),Number(this));
     return item.id === Number(this);
 }
-
+// parse the bried correctly
+function parseBrief(value){
+    const splitedpart = value.split("\n")
+    if(splitedpart.length === 1){
+        return "No content added";
+    }else{
+        // try until there is something
+        for(let i=1;i<splitedpart.length;i++){
+            if(splitedpart[i].length > 0){
+                // return the first 20 characters
+                return value.split("\n")[i].substring(0,20);
+            }
+        }
+        // if there is all blank string return a blank string for showing correct brief
+        return "\n";
+    }    
+}
+// saveFile
 ipcMain.on('saveFile',(event,arg) =>{
     console.log('saving file',arg);
     let status="save success";
@@ -198,7 +222,7 @@ ipcMain.on('saveFile',(event,arg) =>{
         pos = dict.findIndex(findId,value.id);
         if(pos === -1) {status="save fail"; event.returnValue = status; return;}
         //first 20
-        let brief = value.value.split("\n").length === 1  ? "No content added" : value.value.split("\n")[1].substring(0,20);
+        let brief = parseBrief(value.value);
         dict[pos] = {
             id: value.id,
             filename: value.filename,
@@ -221,7 +245,63 @@ ipcMain.on('saveFile',(event,arg) =>{
     }
     event.returnValue = status;
 })
+// delete a file
+function deleteFile(e,arg){
+    console.log('deleting file',arg);
+    let status = "delete success"
+    const [type,fileid] = arg;
+    const filepath = dataPath+type+"/";
+    const filename = filepath+fileid+".json";
+    checkPath(filepath);
+    checkToc(filepath);
+    //update the toc; delete the JSON for given fileid
+    try{
+        let dict = fs.readFileSync(filepath+"toc.json",'utf-8');
+        dict = JSON.parse(dict);
+        console.log("dict:",dict);
+        dict = Array.from(dict);
+        // let fileid = value.id;
+        console.log("finding id:",fileid)
+        pos = dict.findIndex(findId,fileid);
+        if(pos === -1) {status="delete fail"; e.returnValue = status; return;}
+        //first 20
+        dict.splice(pos,1)
+        // console.log("dict:",dict);
+        fs.writeFileSync(filepath+"toc.json",JSON.stringify(dict,null,2),'utf-8');
+    }catch(err){
+        console.error(err);
+        status = "delete fail"
+    }
+    // delete the file
+    try{
+        fs.rmSync(filename);
+    }catch{
+        console.error(err)
+        status = "delete fail"
+    }
+}
+// wait on deleteFile (not used)
+ipcMain.on('deleteFile',(event,arg) =>{
+    deleteFile(event,arg);
+})
+// wait on right click on note
+ipcMain.on("context-menu-note", (event,arg) =>{
+    const template = [
+        {
+            label: 'delete note',
+            click: ()=> {
+                console.log("delete "+arg)
+                deleteFile(event,arg);
+            }
+        },
+    ]
+    const menu = Menu.buildFromTemplate(template);
+    menu.popup(BrowserWindow.fromWebContents(event.sender));
+    event.returnValue = "menu-created";
+})
 
+
+// read a file; if fail return "read fail"
 ipcMain.on('readFile',(event,arg) =>{
     console.log('reading file',arg);
     let status = "read success";

@@ -24,5 +24,9 @@
 }
 
 .note-brief{
-    color: var(--line-color);
+    color: var(--line-color)
+}
+
+.note-list-clicked{
+    background-color: var(--light-bg-color);
 }
