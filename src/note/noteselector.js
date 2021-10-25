@@ -49,7 +49,7 @@ class NoteList extends React.Component{
         const listdata = notelist.map((note, index) =>{
             if(note.type ==="total") return;
             if(note.id === this.props.fileclicked){
-                fileclicked = "";
+                fileclicked = "note-list-clicked";
                 console.log(note.id,"clicked");
             }else{
                 fileclicked = ""
