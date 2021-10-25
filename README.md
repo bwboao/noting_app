@@ -1,6 +1,6 @@
 # Noting app
-A (React)[https://reactjs.org/] + (Electron)[https://www.electronjs.org/] combined project for code learning.
-This project is for own-use locally, should not load any other internet resources, may be vulnerable.
+A [React](https://reactjs.org/) + [Electron](https://www.electronjs.org/) combined project for code learning.
+This project is for own-use locally, **should not load any other internet resources, may be vulnerable.**
 
 ## Notes
 You can create note and delete note, no markdown is supported, just plain text for now
@@ -35,4 +35,4 @@ electron-builder build --win portable -c.extraMetadata.main=build/electron.js --
 ```
 
 ## fs.existssync is not a function
-If you pull this project directly, installing the npm dependencies. After running there might be this warning, it is an issue, my way solving is (changing webpack configs as mentioned in a github issue)[https://github.com/electron/electron/issues/9920#issuecomment-478826728]. Then everything should just run fine.
+If you pull this project directly, installing the npm dependencies. After running there might be this warning, it is an issue, my way solving is [changing webpack configs as mentioned in a github issue](https://github.com/electron/electron/issues/9920#issuecomment-478826728). Then everything should just run fine.
