@@ -2,6 +2,9 @@
 A [React](https://reactjs.org/) + [Electron](https://www.electronjs.org/) combined project for code learning.
 This project is for own-use locally, **should not load any other internet resources, may be vulnerable.**
 
+## To-do list
+Add new To do lists, write anything down and delete them as you want, check them out when finished!
+
 ## Notes
 You can create note and delete note, no markdown is supported, just plain text for now
 
@@ -10,8 +13,10 @@ You can create journal(s) for today, seven days are shown initially, click show 
 Click any journal to edit them.
 
 ## Storage
-The notes are stored at Document/noting for both system (Windows and Mac) using `fs` as `JSON` files.
+The notes and journals are stored at Document/noting for both system (Windows and Mac) using `fs` as `JSON` files.
 The app mantains it with a file named `toc.json`, make sure to delete the entry if you delete files manually.(Or just whipe the whole directory)
+
+The to-do list is not stored as files, it is stored in the browser's storage using `localStorage`, this may be cleared(if intended or something breaks). Try writing important informations in notes instead of to-do list.
 
 ## packaging
 I use `electron-builder` to pack the files into an Windows app.
