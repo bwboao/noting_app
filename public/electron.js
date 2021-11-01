@@ -37,6 +37,12 @@ function createWindow(){
     if(isDev){
         win.webContents.openDevTools({ mode: 'detach'});
     }
+    // opening links in an external browser (e.g. chrome) instead of using electron
+    // from https://stackoverflow.com/questions/32402327/how-can-i-force-external-links-from-browser-window-to-open-in-a-default-browser
+    win.webContents.on('new-window', function(e, url){
+        e.preventDefault();
+        require('electron').shell.openExternal(url);
+    })
 }
 
 app.whenReady().then(()=>{
@@ -222,11 +228,11 @@ ipcMain.on('saveFile',(event,arg) =>{
         pos = dict.findIndex(findId,value.id);
         if(pos === -1) {status="save fail"; event.returnValue = status; return;}
         //first 20
-        let brief = parseBrief(value.value);
+        // let brief = parseBrief(value.value);
         dict[pos] = {
             id: value.id,
             filename: value.filename,
-            brief: brief,
+            brief: value.brief,
             lastModifiedDate: Date.now(),
             folder: value.folder,           
         };

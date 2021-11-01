@@ -1,6 +1,29 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './editor.css';
 import { ipcRenderer } from 'electron';
+// use stackoverflow editor instead of plain textarea
+// import { StacksEditor } from "@stackoverflow/stacks-editor";
+// import "@stackoverflow/stacks-editor/dist/styles.css";
+import Tiptap from './tiptap';
+
+// function StkEditor(){
+//     useEffect(()=>{
+//         console.log(document.querySelector("#stack-editor"))
+//         new StacksEditor(
+//             // this.editorRef.current,
+//             document.querySelector("#stack-editor"),
+//             "test if working",
+//             {}
+//         );
+//     },[])
+
+//     return(
+//         <textarea 
+//         id="stack-editor"
+//         // ref={this.editorRef}
+//     />
+//     );
+// }
 
 
 class Editor extends React.Component{
@@ -12,10 +35,13 @@ class Editor extends React.Component{
             title: "",
             file: this.props.file,
         }
+        // this.editorRef = React.createRef();
     }
     componentDidMount(){
         console.log(this.props);
         this.resetTheValue(this.props.file)
+        // console.log(this.state.file)
+
     }
     shouldComponentUpdate(nextProps){
         console.log("should?",nextProps.file,this.props.file)
@@ -69,11 +95,10 @@ class Editor extends React.Component{
         })
     }
     render(){
-        // console.log(this.state.file)
         return(
             <div className="editor-component-container">
                 {/* <span>file: {this.props.file}</span> */}
-                <textarea
+                {/* <textarea
                     key={this.props.file}
                     onInput={(e)=>this.handleInput(e)}
                     onBlur={(e)=>this.handleOnBlur(e)}
@@ -84,11 +109,20 @@ class Editor extends React.Component{
                     name="currentnote"
                     
                     value={this.state.value}
-                    />
+                    /> */}
+
+            <Tiptap
+                key={this.state.file}
+                file={this.state.file}
+                content={this.state.value}
+                type={this.props.type}
+                folder={this.props.folder}
+            />
             </div>
         )
     }
 }
+
 
 
 export default Editor;
