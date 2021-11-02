@@ -30,3 +30,30 @@
 .note-list-clicked{
     background-color: var(--light-bg-color);
 }
+
+.note-list-container{
+    flex: 1;
+    overflow-y: auto;
+    max-height: calc(100vh - 40px);
+}
+
+/* for webkit which is chrome for our electron app */
+.note-list-container::-webkit-scrollbar{
+    width: 6px;
+  }
+.note-list-container::-webkit-scrollbar-thumb{
+    background-color: #68758f;
+    border-radius: 8px;
+}
+.note-list-container::-webkit-scrollbar-track{
+    width: 8px;
+    background-color: transparent;
+}
+.note-list-container::-webkit-scrollbar-thumb:hover{
+    cursor:default;
+    background-color: #7e98b1;
+}
+
+.note-list-container:focus-visible{
+    outline: none;  
+} 

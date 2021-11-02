@@ -4,6 +4,8 @@ import './noteselector.css'
 // const  fs = require('fs')
 // const electron = window.require("electron");
 
+
+
 class NoteList extends React.Component{
     constructor(props){
         super(props);
@@ -91,7 +93,7 @@ class NoteList extends React.Component{
 class NoteSelector extends React.Component{
     render(){
         return(
-            <div className="container">
+            <div className="note-list-container">
                 <NoteList
                     handleClickNote = {(i) => this.props.handleClickNote(i)}
                     notelist={this.props.notelist}

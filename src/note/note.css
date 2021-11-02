@@ -10,6 +10,8 @@
     justify-content: left;
     width: 170px;
     border-right: #68758F 1px solid;
+    display: flex;
+    flex-direction: column;
 }
 
 .note-bar{
