@@ -9,6 +9,7 @@ import Link from "@tiptap/extension-link";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import './tiptap.css'
 import { ipcRenderer } from 'electron';
+import KatexExtension from "./ketaxExtension";
 
 function parseBrief(value){
     const splitedpart = value.split("\n")
@@ -95,6 +96,7 @@ function Tiptap(props) {
             //   languageClassPrefix: 'language-',
         }),
         CustomExtension,
+        KatexExtension,
         Link.extend({
             addKeyboardShortcuts(){
                 return{

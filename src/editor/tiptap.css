@@ -83,7 +83,7 @@
   font-size: medium;
   overflow-y: scroll;
   overflow-wrap: break-word;
-  word-break: break-all;
+  /* word-break: break-all; */
 }
 
 /* for webkit which is chrome for our electron app */
