@@ -210,6 +210,7 @@ class SubList extends React.Component{
                 focus: false,
             }],
             itemsDone: [],
+            sublistTitle: "To-do",
             renew: true,
         }
     }
@@ -222,7 +223,8 @@ class SubList extends React.Component{
                 if(list.id === this.props.listid){
                     // console.log("did mount",list,this.props.listid)
                     this.setState({
-                        itemsTodo: list.tree
+                        itemsTodo: list.tree,
+                        sublistTitle: list.sublistTitle
                     })
                 }
             });
@@ -307,6 +309,10 @@ class SubList extends React.Component{
         })
         this.props.handleStoreToDoList(itemsTodo);
     }
+    handleStoreSubListTitle(e){
+        console.log(e.target.innerText);
+        this.props.handleStoreSubListTitle(e.target.innerText);
+    }
 
     render(){
         // console.log("this is id",this.props.listid,"my delete handle is",this.props.handleDeleteToDo)
@@ -375,7 +381,14 @@ class SubList extends React.Component{
         return(
             <div className="sublist">
                 <div className="sublist-header">
-                    <span>To do</span>
+                    <span 
+                        contentEditable="true"
+                        spellCheck="false"
+                        suppressContentEditableWarning={true}
+                        onBlur={(e)=>this.handleStoreSubListTitle(e)}
+                    >
+                        {this.state.sublistTitle}
+                    </span>
                     <button 
                         className="delete-sublist-btn"
                         onClick={this.props.handleDeleteToDo}
@@ -443,7 +456,19 @@ class ToDoList extends React.Component {
         // const storedtree = localStorage.getItem('toDoList')
         // console.log("stored", JSON.parse(storedtree));
     }
-
+    handleStoreSubListTitle(id,title){
+        let todotree = this.state.todotree.slice();
+        todotree.map((list)=>{
+            if(list.id === id){
+                list.sublistTitle = title
+            }
+        })
+        this.setState({
+            todotree: todotree
+        })
+        this.storeTree(todotree);
+        console.log("subtitle",todotree,id,title)
+    }
     handleStoreToDoList(id,e){
         let idlist = this.state.idlist.slice();
         let todotree = this.state.todotree.slice();
@@ -468,7 +493,7 @@ class ToDoList extends React.Component {
         this.setState({
             count: this.state.count + 1,
             idlist: idlist.concat([listid]),
-            todotree: todotree.concat([{id: listid, tree: null}]),
+            todotree: todotree.concat([{id: listid, tree: null, sublistTitle: "To-do"}]),
         });
         console.log("clicked",listid);
     }
@@ -504,6 +529,7 @@ class ToDoList extends React.Component {
                     listid={id}
                     handleDeleteToDo={()=>this.handleDeleteToDo(id)}
                     handleStoreToDoList={(e)=>this.handleStoreToDoList(id,e)}
+                    handleStoreSubListTitle={(e)=>this.handleStoreSubListTitle(id,e)}
                 />
             )
         })

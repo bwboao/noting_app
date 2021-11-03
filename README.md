@@ -1,3 +1,6 @@
+# Full feature branch
+The original purpose is to train my skill, so no extra npm modules is used, functions are all written from scratch (and ugly). The full feature branch is for fulfilling a better UX (such as Rich editor) which will use others' module, since building from scratch is meaningless.
+
 # Noting app
 A [React](https://reactjs.org/) + [Electron](https://www.electronjs.org/) combined project for code learning.
 This project is for own-use locally, **should not load any other internet resources, may be vulnerable.**
